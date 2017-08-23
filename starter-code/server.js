@@ -14,7 +14,7 @@ const app = express();
 // Windows and Linux users; You should have retained the user/pw from the pre-work for this course.
 // Your url may require that it's composed of additional information including user and password
 // const conString = 'postgres://USER:PASSWORD@HOST:PORT/DBNAME';
-const conString = 'postgres://postgres@localhost:5432';
+const conString = 'postgres://postgres@localhost:5432/kilovolt';
 
 // TODO: Our pg module has a Client constructor that accepts one argument: the conString we just defined.
 //       This is how it knows the URL and, for Windows and Linux users, our username and password for our
@@ -50,7 +50,7 @@ app.get('/articles', function(request, response) {
 
   // Put your response here...
 
-  // We are expecting a response on this line of code so it corresponds to number 5 on the diagram. READ is the part of CRUD that is being enacted/managed here.
+  // This code corresponds to read in CRUD, is used by Article.fetchAll is article.js, and corresponds to numbers 3 (since we're making a query to the database) and 5 (and then sending a response back to the client upon successful completion of this task) from diagram.
 
   client.query('SELECT * FROM articles')
   .then(function(result) {
@@ -66,7 +66,7 @@ app.post('/articles', function(request, response) {
 
   // Put your response here...
 
-  // We are requesting information so this line corresponds to number 2 on the diagram. CREATE is the part of CRUD that is being utilized here.
+  // We are requesting information so this line corresponds to number 3 on the diagram. CREATE is the part of CRUD that is being utilized her because of the INSERT keyword on line 72. The insertRecord() method from article.js interacts with the below.
 
   client.query(
     `INSERT INTO
@@ -95,7 +95,7 @@ app.put('/articles/:id', function(request, response) {
 
   // Put your response here...
 
-  // We are making requests so this line corresponds to the number 2 on the diagram. We are also expecting a response so it corresponds to the number 5. UPDATE is the part of CRUD that is being utilized.
+  // We are making requests from a database so this line corresponds to the number 3 on the diagram. We are also expecting a response so it corresponds to the number 5. UPDATE is the part of CRUD that is being utilized. Article.updateRecord is the method in article.js that is using this.
 
   client.query(
     `UPDATE articles
@@ -126,7 +126,7 @@ app.delete('/articles/:id', function(request, response) {
 
   // Put your response here...
 
-  // Requests are being made so this line corresponds to the number 2. We are expecting a response so this also corresponds to the number 5. DESTROY is the part of CRUD that is being utilized.
+  // Requests are being made so this line corresponds to the number 3. We are expecting a response so this also corresponds to the number 5. DESTROY is the part of CRUD that is being utilized. The following code interacts with the deleteRecord() method of article.
 
   client.query(
     `DELETE FROM articles WHERE article_id=$1;`,
@@ -143,7 +143,9 @@ app.delete('/articles/:id', function(request, response) {
 app.delete('/articles', function(request, response) {
   // COMMENT: What number(s) of the full-stack-diagram.png image correspond to the following line of code? Which method of article.js is interacting with this particular piece of `server.js`? What part of CRUD is being enacted/managed by this particular piece of code?
 
-  // Put your response here... Queries are being made so it corresponds with the number 3.We are also expecting a response so it corresponds with number 5. DESTROY is the part of CRUD that is being utilized.
+  // Put your response here...
+
+  // Queries are being made so it corresponds with the number 3. We are also expecting a response so it corresponds with number 5. DESTROY is the part of CRUD that is being utilized. Article.deleteRecord is the method from article.js using this.
 
   client.query(
     'DELETE FROM articles;'
@@ -157,7 +159,7 @@ app.delete('/articles', function(request, response) {
 });
 
 // COMMENT: What is this function invocation doing?
-// Put your response here...
+//loadDB creates a new table if none exists. It then populates the table with data from hackerIpsum.json, assuming again that the table does not exist.
 loadDB();
 
 app.listen(PORT, function() {
@@ -169,9 +171,10 @@ app.listen(PORT, function() {
 ////////////////////////////////////////
 function loadArticles() {
   // COMMENT: What number(s) of the full-stack-diagram.png image correspond to the following line of code? Which method of article.js is interacting with this particular piece of `server.js`? What part of CRUD is being enacted/managed by this particular piece of code?
+
   // Put your response here...
 
-  // There is a query being made so it corresponds to the number 3. READ is the part of CRUD that is being utilized.
+  // There is a query being made so it corresponds to the number 3. This is where I'm a bit confused Carlo, because I see the lines of code below and think that, because of the SELECT and the INSERT, this function corresponds with both READ and CREATE from CRUD. I see a query that's attempting to READ from the table of articles, and if there's nothing there to then CREATE articles by INSERTING the data from hackerIpsum.json into the articles table. I know you said this only really has CREATE from CRUD and I don't quite understand why. I can see how it may lean further towards being CREATE than READ. I'm also not sure what method from article.js this code relates to. Because it CREATES information by INSERTING into the articles table, I could see this pertaining to Article.insertRecord more than any of the other methods.
 
   client.query('SELECT COUNT(*) FROM articles')
   .then(result => {
@@ -199,7 +202,7 @@ function loadArticles() {
 function loadDB() {
   // COMMENT: What number(s) of the full-stack-diagram.png image correspond to the following line of code? Which method of article.js is interacting with this particular piece of `server.js`? What part of CRUD is being enacted/managed by this particular piece of code?
 
-  // Put your response here... Queries are being made so it corresponds with number 3. CREATE is the part of CRUD that is being utilized.
+  // Put your response here... Queries are being made so it corresponds with number 3. CREATE is the part of CRUD that is being utilized. I could see Article.insertRecord being the method in article.js that is interacting with this function, but again I'm not entirely certain.
 
   client.query(`
     CREATE TABLE IF NOT EXISTS articles (
